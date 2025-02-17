@@ -130,6 +130,7 @@ struct ContentView: View {
         }
         showingAlert = true //アラートを表示
     }
+    
 }
 
 #Preview {
