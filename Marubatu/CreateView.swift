@@ -78,19 +78,17 @@ struct CreateView: View {
     }
     // 並び替え処理と並び替え後の保存
     func replaceRow(_ from: IndexSet, _ to: Int) {
-        quizzesArray.move(fromOffsets: from, toOffset: to) // 配列内での並び替え
+        quizzesArray.move(fromOffsets: from, toOffset: to) // 配列の順番を変更
+        // quizzesArrayはそのままで、変更後の状態をUserDefaultsに保存するだけ
         if let encodedArray = try? JSONEncoder().encode(quizzesArray) {
-            quizzesArray = encodedArray
-
+             UserDefaults.standard.setValue(encodedArray, forKey: "quiz")
         }
     }
 
     func rowRemove(at offsets: IndexSet) {
-        var array = quizzesArray
-        array.remove(atOffsets: offsets)
-        if let encodedArray = try? JSONEncoder().encode(array) {
-            quizzesArray = encodedArray
-
+        quizzesArray.remove(atOffsets: offsets) // 配列から項目を削除
+        if let encodedArray = try? JSONEncoder().encode(quizzesArray) {
+             UserDefaults.standard.setValue(encodedArray, forKey: "quiz")
         }
     }
 
