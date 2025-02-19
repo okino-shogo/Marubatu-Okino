@@ -76,21 +76,32 @@ struct CreateView: View {
             })
         }
     }
-    // 並び替え処理と並び替え後の保存
+    // 並び替え処理と保存（エンコードエラー時は元に戻す）
     func replaceRow(_ from: IndexSet, _ to: Int) {
+        let originalArray = quizzesArray  // 現在の状態をバックアップ
         quizzesArray.move(fromOffsets: from, toOffset: to) // 配列の順番を変更
-        // quizzesArrayはそのままで、変更後の状態をUserDefaultsに保存するだけ
         if let encodedArray = try? JSONEncoder().encode(quizzesArray) {
-             UserDefaults.standard.setValue(encodedArray, forKey: "quiz")
+            UserDefaults.standard.setValue(encodedArray, forKey: "quiz")
+        } else {
+            // エンコードエラー発生時は元の状態に戻す
+            quizzesArray = originalArray
+            print("エンコードエラー: 並び替え保存に失敗しました")
         }
     }
 
+    // 削除処理と保存（エンコードエラー時は元に戻す）
     func rowRemove(at offsets: IndexSet) {
+        let originalArray = quizzesArray  // 現在の状態をバックアップ
         quizzesArray.remove(atOffsets: offsets) // 配列から項目を削除
         if let encodedArray = try? JSONEncoder().encode(quizzesArray) {
-             UserDefaults.standard.setValue(encodedArray, forKey: "quiz")
+            UserDefaults.standard.setValue(encodedArray, forKey: "quiz")
+        } else {
+            // エンコードエラー発生時は元の状態に戻す
+            quizzesArray = originalArray
+            print("エンコードエラー: 削除保存に失敗しました")
         }
     }
+
 
 
     // 問題追加(保存)の関数
