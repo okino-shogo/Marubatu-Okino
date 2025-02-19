@@ -16,28 +16,28 @@ struct Quiz: Identifiable,Codable {
 
 
 struct ContentView: View {
-    
+
     // 問題
     let quizeExamples: [Quiz] = [
         Quiz(question: "iPhoneアプリを開発する統合環境はZcodeである", answer: false),
         Quiz(question: "Xcode画面の右側にはユーティリティーズがある", answer: true),
         Quiz(question: "Textは文字列を表示する際に利用する", answer: true)
     ]
-    
+
     @AppStorage("quiz") var quizzesData = Data()//UserDefaultsから問題を読み込む(Data型)
     @State var quizzesArray: [Quiz] = []//問題を入れておく配列
     
     @State var currentQuestionNum = 0//今、何問目の数字
     @State var showingAlert = false //アラートの表示・非表示を制御
     @State var alertTitle = ""//"正解"か"不正解"の文字を入れるための変数
-    
+
     //画面生成時にquizzesDateに読み込んだDate型の値を[Quiz]型にデコードしてquizzesArrayに入れる
     init(){
         if let decodedQuizzes = try? JSONDecoder().decode([Quiz].self, from: quizzesData){
             _quizzesArray = State(initialValue: decodedQuizzes)
         }
     }
-    
+
     var body: some View {
         GeometryReader { geometry in
             NavigationStack{
@@ -47,7 +47,7 @@ struct ContentView: View {
                         .frame(width: geometry.size.width*0.85, alignment: .leading)//横幅を250、左寄せに
                         .fontDesign(.rounded) //フォントのデザインを変更
                         .background(.yellow)
-                    
+
                     Spacer()
                     //0Xボタンを横並びにするためにHStackを使う
                     HStack{
@@ -82,11 +82,14 @@ struct ContentView: View {
                     Button("OK",role: .cancel){}
                 }
                 .toolbar {
-                    
+
                     ToolbarItem(placement: .topBarTrailing) {
                         NavigationLink{
                             CreateView(quizzesArray: $quizzesArray)
                                 .navigationTitle("問題を作ろう")
+                                .onDisappear {
+                                    currentQuestionNum = 0
+                                }
                         }label:{
                             Image(systemName: "plus")
                                 .font(.title)
