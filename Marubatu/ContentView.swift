@@ -26,7 +26,7 @@ struct ContentView: View {
 
     @AppStorage("quiz") var quizzesData = Data()//UserDefaultsから問題を読み込む(Data型)
     @State var quizzesArray: [Quiz] = []//問題を入れておく配列
-    
+
     @State var currentQuestionNum = 0//今、何問目の数字
     @State var showingAlert = false //アラートの表示・非表示を制御
     @State var alertTitle = ""//"正解"か"不正解"の文字を入れるための変数
@@ -61,7 +61,7 @@ struct ContentView: View {
                         .font(.system(size:100, weight: .bold))//フォントサイズを100、太字に
                         .background(.red)//背景を赤に
                         .foregroundStyle(.white)//文字の色を白に
-                        
+
                         Button {
                             //print("×")//ボタンが押された時の動作
                             checkAnswer(yourAnswer: false)
@@ -72,7 +72,7 @@ struct ContentView: View {
                         .font(.system(size:100, weight: .bold))//フォントサイズを100、太字に
                         .background(.blue)//背景を赤に
                         .foregroundStyle(.white)//文字の色を白に
-                        
+
                     }
                 }
                 .padding()
@@ -97,21 +97,21 @@ struct ContentView: View {
                     }
                 }
             }
-            
+
         }
     }
-    
+
     //問題文を表示させるための関数
     func showQuestion() -> String {
         var question = "問題がありません"
-        
+
         if !quizzesArray.isEmpty {
             let quiz = quizzesArray[currentQuestionNum]
             question = quiz.question
         }
         return question
     }
-    
+
     //回答をチェックする関数、正解なら次の問題を表示
     func checkAnswer(yourAnswer: Bool) {
         if quizzesArray.isEmpty {
@@ -127,13 +127,13 @@ struct ContentView: View {
                 //超えたときは0に戻す
                 currentQuestionNum = 0
             }
-            
+
         }else {
             alertTitle = "不正解"
         }
         showingAlert = true //アラートを表示
     }
-    
+
 }
 
 #Preview {

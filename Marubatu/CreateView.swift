@@ -12,7 +12,9 @@ struct CreateView: View {
     @Binding var quizzesArray: [Quiz] // 回答画面で読み込んだ問題を受け取る
     @State private var questionText = ""//テキストフィールドの文字を受け取る
     @State private var selectAnswer = "O"
-    let answers = ["O","X"]//ピッカーの選択肢一覧
+    @State private var currentQuestionNum = 0 // 現在の問題番号を追跡
+    let answers = ["O", "X"] // ピッカーの選択肢一覧
+
     var body: some View {
 
         VStack {
@@ -47,7 +49,7 @@ struct CreateView: View {
             Button {
                 quizzesArray.removeAll()
                 UserDefaults.standard.removeObject(forKey: "quiz")
-
+                currentQuestionNum = 0 // 削除後にリセット
             } label: {
                 Text("全削除")
             }
@@ -82,6 +84,7 @@ struct CreateView: View {
         quizzesArray.move(fromOffsets: from, toOffset: to) // 配列の順番を変更
         if let encodedArray = try? JSONEncoder().encode(quizzesArray) {
             UserDefaults.standard.setValue(encodedArray, forKey: "quiz")
+            currentQuestionNum = 0 // 並び替え後にリセット
         } else {
             // エンコードエラー発生時は元の状態に戻す
             quizzesArray = originalArray
@@ -95,6 +98,7 @@ struct CreateView: View {
         quizzesArray.remove(atOffsets: offsets) // 配列から項目を削除
         if let encodedArray = try? JSONEncoder().encode(quizzesArray) {
             UserDefaults.standard.setValue(encodedArray, forKey: "quiz")
+            currentQuestionNum = 0 // 削除後にリセット
         } else {
             // エンコードエラー発生時は元の状態に戻す
             quizzesArray = originalArray
@@ -110,8 +114,7 @@ struct CreateView: View {
             print("プリント文が入力されていません")
             return
         }
-        var savingAnswers = true //保存するためのtrue/falseを入れる変数
-
+        var savingAnswers = true // 保存するための true/false を入れる変数
         //OかXかで,true/falseを切り替える
         switch answer {
         case "O":
