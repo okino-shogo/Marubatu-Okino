@@ -12,7 +12,7 @@ struct CreateView: View {
     @Binding var quizzesArray: [Quiz] // 回答画面で読み込んだ問題を受け取る
     @State private var questionText = ""//テキストフィールドの文字を受け取る
     @State private var selectAnswer = "O"
-    @State private var currentQuestionNum = 0 // 現在の問題番号を追跡
+    @Binding var currentQuestionNum: Int
     let answers = ["O", "X"] // ピッカーの選択肢一覧
 
     var body: some View {
