@@ -85,7 +85,7 @@ struct ContentView: View {
 
                     ToolbarItem(placement: .topBarTrailing) {
                         NavigationLink{
-                            CreateView(quizzesArray: $quizzesArray)
+                            CreateView(quizzesArray: $quizzesArray, currentQuestionNum: $currentQuestionNum)
                                 .navigationTitle("問題を作ろう")
                                 .onDisappear {
                                     currentQuestionNum = 0
